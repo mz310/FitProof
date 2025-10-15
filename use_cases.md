@@ -5,7 +5,7 @@
 - **Gym гишүүн (Member)**
 - **Дасгалжуулагч (Trainer)**
 - **Gym менежер (Manager)**
-- **QR төхөөрөмж / Device**
+- **QR төхөөрөмж**
 - **Урамшууллын систем (Reward System)**
 
 ## Use Cases
