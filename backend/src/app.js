@@ -25,6 +25,11 @@ import {
   createUser,
   listUsers,
   updateUserRole,
+  findDeviceByCode,
+  createSession,
+  findSessionById,
+  addSessionSet,
+  listSessionSets,
 } from "./db.js";
 
 dotenv.config();
@@ -103,16 +108,6 @@ const sanitizeUser = (user) => {
   const { password_hash, passwordHash, ...rest } = user;
   return rest;
 };
-
-// Devices (still in-memory for now)
-const devices = [
-  { id: uuid(), code: "DEV-001", name: "Chest Press", location: "Zone A", isActive: true },
-  { id: uuid(), code: "DEV-002", name: "Treadmill 1", location: "Cardio", isActive: true },
-  { id: uuid(), code: "DEV-003", name: "Squat Rack", location: "Zone B", isActive: true },
-];
-
-// In-memory sessions; could move to DB later
-const sessions = [];
 
 // Auth routes
 app.post("/api/auth/register", validate(registerSchema), async (req, res, next) => {
@@ -215,25 +210,15 @@ app.post(
   authenticate(JWT_SECRET),
   requireRole(["member", "trainer", "admin"]),
   validate(startSessionSchema),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const { qrCode, deviceCode } = req.body || {};
       const code = (qrCode || deviceCode || "").trim();
       if (!code) throw new ValidationError("Please provide a QR or device code.");
-      const device = devices.find((d) => d.code === code && d.isActive);
+      const db = await initDb();
+      const device = await findDeviceByCode(db, code);
       if (!device) throw new NotFoundError("Device", code);
-      const session = {
-        id: uuid(),
-        userId: req.user.sub,
-        deviceId: device.id,
-        deviceCode: device.code,
-        startedAt: new Date().toISOString(),
-        status: "active",
-        sets: [],
-        totalVolume: 0,
-        totalDuration: 0,
-      };
-      sessions.push(session);
+      const session = await createSession(db, { userId: req.user.sub, deviceId: device.id, deviceCode: device.code });
       res.status(201).json({ session, device });
     } catch (err) {
       next(err);
@@ -247,9 +232,10 @@ app.post(
   authenticate(JWT_SECRET),
   requireRole(["member", "trainer", "admin"]),
   validate(logSetSchema),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      const session = sessions.find((s) => s.id === req.params.id);
+      const db = await initDb();
+      const session = await findSessionById(db, req.params.id);
       if (!session) throw new NotFoundError("Session", req.params.id);
       if (session.userId !== req.user.sub && req.user.role !== "admin" && req.user.role !== "trainer") {
         throw new ForbiddenError("You cannot access this session.");
@@ -274,11 +260,21 @@ app.post(
         volume = entry.distance || entry.durationSec;
       }
       entry.volume = volume;
-      session.sets.push(entry);
-      session.totalVolume = session.sets.reduce((sum, s) => sum + (s.volume || 0), 0);
-      session.totalDuration = session.sets.reduce((sum, s) => sum + (s.durationSec || 0), 0);
-
-      res.status(201).json({ session });
+      await addSessionSet(db, {
+        sessionId: session.id,
+        type,
+        exerciseName: entry.exerciseName,
+        weight: entry.weight,
+        reps: entry.reps,
+        sets: entry.sets,
+        distance: entry.distance,
+        durationSec: entry.durationSec,
+        volume,
+      });
+      const setsList = await listSessionSets(db, session.id);
+      const totalVolume = setsList.reduce((sum, s) => sum + (s.volume || 0), 0);
+      const totalDuration = setsList.reduce((sum, s) => sum + (s.durationSec || 0), 0);
+      res.status(201).json({ session: { ...session, sets: setsList, totalVolume, totalDuration } });
     } catch (err) {
       next(err);
     }
