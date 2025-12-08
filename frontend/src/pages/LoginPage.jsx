@@ -77,9 +77,24 @@ export default function LoginPage() {
       </form>
 
       <div style={{ marginTop: 24, borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 16 }}>
-        <button className="btn secondary" type="button" disabled={loading} onClick={handleRegister} style={{ width: "100%" }}>
-          {loading ? "Registering..." : "Quick register (member)"}
-        </button>
+        <h3 style={{ margin: "0 0 8px 0" }}>Register new member</h3>
+        <form onSubmit={handleRegister}>
+          <div className="form-row">
+            <label className="label">Name</label>
+            <input className="input" value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+          <div className="form-row">
+            <label className="label">Email</label>
+            <input className="input" type="email" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} required />
+          </div>
+          <div className="form-row">
+            <label className="label">Password</label>
+            <input className="input" type="password" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} required />
+          </div>
+          <button className="btn" type="submit" disabled={loading} style={{ width: "100%", marginTop: 10 }}>
+            {loading ? "Registering..." : "Register & Sign in"}
+          </button>
+        </form>
       </div>
     </div>
   );
