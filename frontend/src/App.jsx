@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import ScanPage from "./pages/ScanPage";
 import SessionPage from "./pages/SessionPage";
 import AdminUsersPage from "./pages/AdminUsersPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const Protected = ({ children, roles }) => {
   const { user, loading } = useAuth();
@@ -32,6 +33,7 @@ const Shell = ({ children }) => {
         <div className="nav-links">
           {user && <Link className={linkClass("/scan")} to="/scan">Scan</Link>}
           {user && <Link className={linkClass("/session")} to="/session">Session</Link>}
+          {user && <Link className={linkClass("/profile")} to="/profile">Profile</Link>}
           {user?.role === "admin" && <Link className={linkClass("/admin")} to="/admin/users">Admin</Link>}
           {user ? (
             <button className="btn secondary" onClick={logout}>Logout</button>
@@ -51,6 +53,7 @@ export default function App() {
       <Route path="/login" element={<Shell><LoginPage /></Shell>} />
       <Route path="/scan" element={<Protected><Shell><ScanPage /></Shell></Protected>} />
       <Route path="/session" element={<Protected><Shell><SessionPage /></Shell></Protected>} />
+      <Route path="/profile" element={<Protected><Shell><ProfilePage /></Shell></Protected>} />
       <Route path="/admin/users" element={<Protected roles={["admin"]}><Shell><AdminUsersPage /></Shell></Protected>} />
       <Route path="*" element={<Navigate to="/scan" />} />
     </Routes>
