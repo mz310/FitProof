@@ -1,9 +1,9 @@
-﻿# Sprint 1 Review & Retrospective (FitProof)
+﻿# Sprint 1 -ийн ажлын тайлан (FitProof)
 
-## Sprint Goal
+## Sprint-ийн зорилго
 QR/code суурьтай session start (US1), manual logging (US2), анхан RBAC + user management (US12).
 
-## Demo Checklist
+## Ажиллах зарчим
 - Backend: cd backend && npm install && npm run dev (PORT=4000).
 - Frontend: cd frontend && npm install && npm run dev (VITE_API_URL=http://localhost:4000/api).
 - Seed accounts: dmin@example.com/admin123, 	rainer@example.com/trainer123, member@example.com/member123.
@@ -20,18 +20,18 @@ QR/code суурьтай session start (US1), manual logging (US2), анхан R
 4) Q&A (3–5 мин).
 
 ## Retrospective
-**What went well**
+**Дууссан ажлууд**
 - US1/US2/US12 дууссан; нэгэн загвартай UI; build амжилттай.
 
-**What didn’t go well**
+**Амжилтгүй болсон ажлууд**
 - Persistent DB байхгүй (in-memory seed).
 - Offline/cache, validation дутуу.
 - Automated test хязгаарлагдмал.
 
-**Next (action items)**
-- DB layer (Postgres/Mongo) + ORM (Prisma/TypeORM/Sequelize) сонгох, session/user/device persistence.
-- Offline queue + form validation (zod/joi) + error UX.
-- Smoke/E2E happy-path test нэмэх; basic unit/integration.
+**Дараагийн хийх ажлууд**
+- US3 (8 SP): Жин/өндөр/нас → recommended/max зөвлөмж (аюулгүй байдлын үндэс)
+- US6 (5 SP): Прогресс/XP-г апп-аар харах (элементар график/карт)
+- US7 (5 SP): Трэнер: хэрэглэгчийн өнөөдрийн өгөгдөл бодитоор харах
 
 ## Burndown хэлэлцэх
 - Эхний өдрүүд: эхлэл удаан байвал шалтгааныг тодорхойлох.
