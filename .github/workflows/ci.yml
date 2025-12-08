@@ -39,3 +39,11 @@ jobs:
         run: |
           npm run test --if-present
           npm run lint --if-present
+
+  deploy-staging:
+    if: github.ref == 'refs/heads/main'
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fake deploy (stub for staging)
+        run: echo "Deploy to staging would run here (e.g., rsync/ssh/docker login)."

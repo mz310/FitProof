@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CD (Continuous Deployment) Танилцуулга - Lab12</title>
+  <style>
+    :root {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      color: #e5e7eb;
+      background: #0a0c10;
+    }
+    body { margin: 0; background: linear-gradient(135deg, #0a0c10, #0f172a); }
+    .page { max-width: 960px; margin: 0 auto; padding: 32px 18px 48px; }
+    .card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+    h1 { margin: 0 0 12px; font-size: 28px; }
+    h2 { margin: 12px 0 8px; font-size: 20px; }
+    p { color: #cbd5e1; line-height: 1.5; }
+    ul { color: #cbd5e1; padding-left: 20px; }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .pill { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.12); padding: 8px 12px; border-radius: 999px; font-weight: 700; letter-spacing: 0.3px; }
+    .btn { background: linear-gradient(135deg, #7dd3fc, #38bdf8); color: #0b0f16; border: none; border-radius: 12px; padding: 12px 16px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 30px rgba(56,189,248,0.25); }
+    .btn.secondary { background: transparent; color: #e5e7eb; border: 1px solid rgba(255,255,255,0.2); box-shadow: none; }
+    .tag { display: inline-block; background: rgba(56,189,248,0.15); color: #7dd3fc; padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; margin-right: 6px; }
+    .table { width: 100%; border-collapse: collapse; color: #e5e7eb; }
+    .table th, .table td { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 8px; text-align: left; }
+    .status-ok { color: #34d399; }
+    .status-warn { color: #fbbf24; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="pill">Lab 12 • Continuous Deployment (CD)</div>
+    <h1>Тасралтгүй хүргэлт (CD) — Танилцуулга</h1>
+    <p>CI/CD pipeline-аа өргөтгөж, туршилт амжилттай болвол автоматаар deploy хийх концепцийг харуулсан HTML тайлан.</p>
+
+    <div class="card">
+      <h2>CD гэж юу вэ?</h2>
+      <p>Continuous Deployment (CD) нь CI-ийн дараах алхам бөгөөд build/test амжилттай болсны дараа автоматаар Staging/Production орчинд deploy хийх процессыг автоматжуулна.</p>
+      <ul>
+        <li>Алдаа эрт илрүүлэхээс гадна гар deploy-ийн эрсдэлийг бууруулна.</li>
+        <li>Release cycle хурдтай, найдвартай болно.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>CI/CD pipeline — 4 алхам</h2>
+      <div class="grid">
+        <div class="card">
+          <span class="tag">1</span>
+          <strong>Код бичих</strong>
+          <p>Git branch дээр хөгжүүлэлт, lint/test локалд.</p>
+        </div>
+        <div class="card">
+          <span class="tag">2</span>
+          <strong>CI</strong>
+          <p>Push/PR үед build/test автоматаар. (GitHub Actions-д аль хэдийн бий).</p>
+        </div>
+        <div class="card">
+          <span class="tag">3</span>
+          <strong>CD</strong>
+          <p>CI амжилттай бол auto-deploy (Heroku/Netlify/VPS).</p>
+        </div>
+        <div class="card">
+          <span class="tag">4</span>
+          <strong>Production</strong>
+          <p>Monitoring/rollback бэлэн; Staging→Prod ялгаатай тохиргоо.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Staging vs Production</h2>
+      <table class="table">
+        <thead><tr><th>Шинж</th><th>Staging</th><th>Production</th></tr></thead>
+        <tbody>
+          <tr><td>Зорилго</td><td>Prod-тэй адил орчинд тест</td><td>Бодит хэрэглэгчид</td></tr>
+          <tr><td>Өгөгдөл</td><td>Синтетик/хуулбарласан</td><td>Бодит</td></tr>
+          <tr><td>Дамжуулалт</td><td>CI/CD auto deploy (preview)</td><td>CI/CD auto deploy (controlled)</td></tr>
+          <tr><td>Эрсдэл</td><td>Бага</td><td>Өндөр — rollback/monitoring шаардлагатай</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>CD-ийн давуу тал</h2>
+      <ul>
+        <li>Release-ийг давтамжтай, бага эрсдэлтэй болгоно.</li>
+        <li>Хүний алдаа гарах боломжийг бууруулна.</li>
+        <li>Feature lead time багасна.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Deploy демо (загвар)</h2>
+      <p>Энэ бол загварчилсан товч; бодит deploy-т GitHub Actions workflow ашигладаг.</p>
+      <button class="btn" onclick="fakeDeploy()">Deploy to Staging</button>
+      <button class="btn secondary" style="margin-left:8px;" onclick="fakeDeployProd()">Deploy to Production</button>
+      <div id="deploy-status" style="margin-top:10px;color:#cbd5e1;"></div>
+    </div>
+
+    <div class="card">
+      <h2>CD-г хэрэгжүүлэх алхмууд</h2>
+      <ol>
+        <li>CI дээр build/test-г найдвартай болгож, үргэлж ногоон болгох.</li>
+        <li>Staging deploy job нэмэх (GitHub Actions → VPS/Heroku/Netlify).</li>
+        <li>Secrets/ENV-ийг GitHub Secrets-д хадгалах.</li>
+        <li>Prod deploy-г CI green нөхцөлтэй автоматаар эсвэл manual approve-тай болгох.</li>
+        <li>Monitoring + rollback (versioned release) төлөвлөх.</li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    function fakeDeploy() {
+      const el = document.getElementById('deploy-status');
+      el.innerText = 'Staging deploy эхэллээ...';
+      setTimeout(() => el.innerText = '✅ Staging deploy амжилттай.', 1200);
+    }
+    function fakeDeployProd() {
+      const el = document.getElementById('deploy-status');
+      el.innerText = 'Production deploy эхэллээ...';
+      setTimeout(() => el.innerText = '✅ Production deploy амжилттай.', 1500);
+    }
+  </script>
+</body>
+</html>
