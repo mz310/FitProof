@@ -6,6 +6,7 @@ import ScanPage from "./pages/ScanPage";
 import SessionPage from "./pages/SessionPage";
 import AdminUsersPage from "./pages/AdminUsersPage";
 import ProfilePage from "./pages/ProfilePage";
+import RegisterPage from "./pages/RegisterPage";
 
 const Protected = ({ children, roles }) => {
   const { user, loading } = useAuth();
@@ -51,6 +52,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Shell><LoginPage /></Shell>} />
+      <Route path="/register" element={<Shell><RegisterPage /></Shell>} />
       <Route path="/scan" element={<Protected><Shell><ScanPage /></Shell></Protected>} />
       <Route path="/session" element={<Protected><Shell><SessionPage /></Shell></Protected>} />
       <Route path="/profile" element={<Protected><Shell><ProfilePage /></Shell></Protected>} />
