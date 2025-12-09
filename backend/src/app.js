@@ -219,7 +219,7 @@ app.post(
       const device = await findDeviceByCode(db, code);
       if (!device) throw new NotFoundError("Device", code);
       const session = await createSession(db, { userId: req.user.sub, deviceId: device.id, deviceCode: device.code });
-      res.status(201).json({ session, device });
+      res.status(201).json({ session: { ...session, sets: [], totalVolume: 0, totalDuration: 0 }, device });
     } catch (err) {
       next(err);
     }

@@ -177,11 +177,12 @@ export const listDevices = async (db) => {
 // Sessions and sets
 export const createSession = async (db, { userId, deviceId, deviceCode }) => {
   const id = uuid();
+  const startedAt = new Date().toISOString();
   await db.run(
     "INSERT INTO sessions (id, user_id, device_id, device_code, started_at, status) VALUES (?, ?, ?, ?, ?, ?)",
-    [id, userId, deviceId, deviceCode, new Date().toISOString(), "active"]
+    [id, userId, deviceId, deviceCode, startedAt, "active"]
   );
-  return { id, userId, deviceId, deviceCode, status: "active" };
+  return { id, userId, deviceId, deviceCode, startedAt, status: "active" };
 };
 
 export const findSessionById = async (db, id) => {
