@@ -22,40 +22,40 @@ export default function ScanPage() {
     <>
       <div className="hero">
         <div className="hero-left">
-          <div className="pill">Just log. No excuses.</div>
-          <h1>Start, scan, and own every rep.</h1>
-          <p>Kick off a session with a quick QR scan or code entry, then track strength and cardio in one flow.</p>
+          <div className="pill">Зүгээр л log хий. Шалтгаан биш.</div>
+          <h1>QR эсвэл код уншуулаад сессээ эхлүүл.</h1>
+          <p>Төхөөрөмжийн QR/код уншуулаад strength ба cardio-г нэг урсгалд бүртгэ.</p>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             <button className="btn" onClick={handleStart} disabled={loading}>
-              {loading ? "Starting..." : "Start session"}
+              {loading ? "Эхлэж байна..." : "Сесс эхлүүлэх"}
             </button>
-            <button className="btn secondary" onClick={() => navigate("/session")}>Go to logging</button>
+            <button className="btn secondary" onClick={() => navigate("/session")}>Лог руу очих</button>
           </div>
           <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
             <div className="glass stat">
-              <span className="label">Latest device</span>
+              <span className="label">Сүүлд ашигласан төхөөрөмж</span>
               <span className="value">{device?.name || "Chest Press"}</span>
             </div>
             <div className="glass stat">
-              <span className="label">Active session</span>
-              <span className="value">{session ? "Yes" : "No"}</span>
+              <span className="label">Идэвхтэй сесс</span>
+              <span className="value">{session ? "Тийм" : "Үгүй"}</span>
             </div>
           </div>
         </div>
         <div className="card">
-          <h3 style={{ marginTop: 0 }}>Scan or enter device</h3>
+          <h3 style={{ marginTop: 0 }}>QR уншуулах эсвэл код оруулах</h3>
           <div className="form-row">
-            <label className="label">Device code</label>
-            <input className="input" value={code} onChange={(e) => setCode(e.target.value)} placeholder="e.g. DEV-001" />
+            <label className="label">Төхөөрөмжийн код</label>
+            <input className="input" value={code} onChange={(e) => setCode(e.target.value)} placeholder="ж: DEV-001" />
           </div>
           <div className="glass" style={{ marginBottom: 12 }}>
-            <div style={{ background: "rgba(255,255,255,0.04)", color: "#e5e7eb", padding: 10, borderRadius: 12, marginBottom: 8 }}>QR Scan (camera)</div>
+            <div style={{ background: "rgba(255,255,255,0.04)", color: "#e5e7eb", padding: 10, borderRadius: 12, marginBottom: 8 }}>QR Scan (камераар)</div>
             <Scanner
               onDecode={(result) => {
                 setCode(result);
                 setScanError(null);
               }}
-              onError={(err) => setScanError(err?.message || "Camera not available or QR unreadable.")}
+              onError={(err) => setScanError(err?.message || "Камер ашиглах боломжгүй эсвэл QR уншигдсангүй.")}
               constraints={{ facingMode: "environment" }}
               styles={{ container: { width: "100%" } }}
             />
@@ -67,10 +67,10 @@ export default function ScanPage() {
 
       {session && (
         <div className="card" style={{ marginTop: 20, background: "linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(124, 58, 237, 0.08))", borderColor: "rgba(255,255,255,0.08)" }}>
-          <h3>Session started</h3>
-          <p>Device: <strong>{device?.name}</strong> ({device?.code}) - {device?.location}</p>
+          <h3>Сесс эхэлсэн</h3>
+          <p>Төхөөрөмж: <strong>{device?.name}</strong> ({device?.code}) - {device?.location}</p>
           <p>Session ID: <code>{session.id}</code></p>
-          <button className="btn secondary" onClick={() => navigate("/session")}>Go to logging</button>
+          <button className="btn secondary" onClick={() => navigate("/session")}>Лог руу очих</button>
         </div>
       )}
     </>
