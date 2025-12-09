@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import api from "../api";
 import { useAuth } from "../hooks/useAuth";
 
@@ -11,12 +11,12 @@ export default function ProfilePage() {
   useEffect(() => {
     const load = async () => {
       setLoading(true);
-      setError(null);
+        setError(null);
       try {
         const res = await api.get("/auth/history");
         setHistory(res.data.history || []);
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to load history");
+        setError(err.response?.data?.message || "Түүх татаж чадсангүй");
       } finally {
         setLoading(false);
       }
@@ -28,26 +28,26 @@ export default function ProfilePage() {
 
   return (
     <div className="card">
-      <h2 style={{ marginTop: 0 }}>Profile</h2>
-      <p style={{ color: "#cbd5e1" }}>???? ????????</p>
+      <h2 style={{ marginTop: 0 }}>Профайл</h2>
+      <p style={{ color: "#cbd5e1" }}>Таны мэдээлэл</p>
       <div className="glass" style={{ display: "grid", gap: 6, marginBottom: 16 }}>
-        <div><strong>???:</strong> {user.name}</div>
-        <div><strong>Email:</strong> {user.email}</div>
-        <div><strong>Role:</strong> {user.role}</div>
+        <div><strong>Нэр:</strong> {user.name}</div>
+        <div><strong>Имэйл:</strong> {user.email}</div>
+        <div><strong>Эрх:</strong> {user.role}</div>
       </div>
 
-      <h3>??????? ??????? ???????????</h3>
-      {loading && <div>????? ?????...</div>}
+      <h3>Сүүлийн нэвтрэх оролдлогын түүх</h3>
+      {loading && <div>Уншиж байна...</div>}
       {error && <div className="error">{error}</div>}
       {!loading && !error && (
         <div className="table-wrapper">
           <table className="table">
             <thead>
               <tr>
-                <th>?????</th>
+                <th>Огноо</th>
                 <th>IP</th>
                 <th>User Agent</th>
-                <th>??????</th>
+                <th>Статус</th>
               </tr>
             </thead>
             <tbody>
@@ -56,11 +56,11 @@ export default function ProfilePage() {
                   <td>{new Date(h.createdAt).toLocaleString()}</td>
                   <td>{h.ip || "-"}</td>
                   <td style={{ maxWidth: 240, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{h.userAgent || "-"}</td>
-                  <td style={{ color: h.success ? "#34d399" : "#f87171" }}>{h.success ? "?????????" : "?????????"}</td>
+                  <td style={{ color: h.success ? "#34d399" : "#f87171" }}>{h.success ? "Амжилттай" : "Амжилтгүй"}</td>
                 </tr>
               ))}
               {history.length === 0 && (
-                <tr><td colSpan={4}>???? ????.</td></tr>
+                <tr><td colSpan={4}>Түүх алга.</td></tr>
               )}
             </tbody>
           </table>
