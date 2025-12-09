@@ -28,9 +28,3 @@ npm run dev
 - /api/health → 200 ok
 - /api/session/start (token шаардлагатай): хоосон body → 400 Validation error; буруу device → 404 Device not found.
 - /api/session/:id/log: буруу type → 400; session олдохгүй → 404; эрхгүй → 403.
-
-## Дараагийн сайжруулалт
-- Winston/Pino-г ашиглаж файл/structured лог руу шилжүүлэх.
-- requireRole/auth middleware-д AppError ашиглан нэгэн загвартай болгох.
-- Frontend-д API алдааны мессежийг нэг төрлийн notification-оор үзүүлэх.
-- E2E/Unit тест: validation/error handler-ийн тест нэмэх.
